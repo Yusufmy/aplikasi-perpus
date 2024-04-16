@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <title>Aplikasi Perpustakaan</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+
+    <!-- Favicons -->
+    <link href="{{ asset(' assets/img/favicon.png') }}" rel="icon" />
+    <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon" />
+
+    <!-- Google Fonts -->
+    <link href="{{ asset('https://fonts.gstatic.com') }}" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet" />
+
+    <!-- Vendor CSS Files -->
+    <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet" />
+
+    <!-- Template Main CSS File -->
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" />
+
+    <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Updated: Mar 10 2024 with Bootstrap v5.3.3
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="logo d-flex align-items-center">
+                {{-- <img src="assets/image/logo.png" alt="" /> --}}
+                <span class="d-none d-lg-block"> Perpustakaan</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div>
+        <!-- End Logo -->
+
+        <div class="search-bar">
+            <form class="search-form d-flex align-items-center" method="POST" action="#">
+                <input type="text" name="query" placeholder="Search" title="Enter search keyword" />
+                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+            </form>
+        </div>
+        <!-- End Search Bar -->
+
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+                <li class="nav-item d-block d-lg-none">
+                    <a class="nav-link nav-icon search-bar-toggle" href="#">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </li>
+                <!-- End Search Icon-->
+
+                <li class="nav-item dropdown pe-3">
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                        data-bs-toggle="dropdown">
+                        <img src="{{ asset('assets/image/profile.jpg') }}" alt="Profile" class="rounded-circle" />
+                        <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->nama_lengkap }}</span>
+                    </a><!-- End Profile Iamge Icon -->
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li class="dropdown-header">
+                            <h6>{{ Auth::user()->nama_lengkap }}</h6>
+                            <span>{{ Auth::user()->role }}</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-person"></i>
+                                <span>My Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-gear"></i>
+                                <span>Account Settings</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                                <i class="bi bi-question-circle"></i>
+                                <span>Need Help?</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="/logout">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Sign Out</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- End Profile Dropdown Items -->
+                </li>
+                <!-- End Profile Nav -->
+            </ul>
+        </nav>
+        <!-- End Icons Navigation -->
+    </header>
+    <!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/dashboard">
+                    <i class="bi bi-grid"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <!-- End Dashboard Nav -->
+
+            @if (Auth::user()->role == 'admin')
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/user">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Pengguna</span>
+                    </a>
+                </li>
+            @endif
+            <!-- End User Nav -->
+
+            @if (Auth::user()->role != 'user')
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/kategori">
+                        <i class="bi bi-bookmarks"></i>
+                        <span>Kategori Buku</span>
+                    </a>
+                </li>
+            @endif
+
+            <!-- <li class="nav-heading">Pages</li> -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/pendataan-buku">
+                    <i class="bi bi-book"></i>
+                    <span>Buku</span>
+                </a>
+            </li>
+            <!-- End Buku Page Nav -->
+
+            <!-- End Kategori Buku Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/data-peminjaman-buku">
+                    <i class="bi bi-journal-plus"></i>
+                    <span>Buku Dipinjam</span>
+                </a>
+            </li>
+            <!-- End Pinjam Buku Nav -->
+
+
+            @if (Auth::user()->role == 'user')
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="/kolesi-buku">
+                        <i class="bi bi-bookmark-heart"></i>
+                        <span>Koleksi Buku</span>
+                    </a>
+                </li>
+                <!-- End Stok Produk Page Nav -->
+            @endif
+
+
+
+            {{-- <li class="nav-item">
+                <a class="nav-link collapsed" href="/pendataan-buku">
+                    <i class="bi bi-journal-text"></i>
+                    <span>Daftar Buku</span>
+                </a>
+            </li> --}}
+            <!-- End Pelanggan Page Nav -->
+
+
+        </ul>
+    </aside>
+    <!-- End Sidebar-->
+
+    @yield('dashboard')
+    @include('sweetalert::alert')
+
+
+    {{-- End Content --}}
+
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/chart.js/chart.umd.js') }}"></script>
+    <script src="{{ asset('assets/vendor/echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/quill/quill.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/simple-datatables/simple-datatables.js') }}"></script>
+    <script src="{{ asset('assets/vendor/tinymce/tinymce.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
+
+    <!-- Template Main JS File -->
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+*******************************************
+ROUTE CREATE image
+    public function create()
+    {
+        $buku = Buku::all();
+        return view('/pendataan-buku', compact('buku'));
+    }
+
+ROUTE UPLOAD image
+ public function store(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'cover' => 'image|file|max:1024',
+            'judul_buku' => 'required',
+            'penulis_buku' => 'required',
+            'penerbit_buku' => 'required',
+            'tahun_terbit_buku' => 'required',
+            'category' => 'required',
+            'status_buku' => '',
+        ]);
+
+        ///Uploda Image
+        $imgCover = $request->file('cover');
+        $img = time() . rand() . '.' . $imgCover->extension();
+
+        // Periksa apakah file dengan nama yang sama sudah ada di dalam direktori
+        if (!file_exists(public_path('/storage/image/' . $imgCover->getClientOriginalName()))) {
+            $destinationPath = public_path('/storage/image/');
+            $imgCover->move($destinationPath, $img);
+            $upload = $img;
+        } else {
+            // Jika file sudah ada, gunakan nama baru yang dihasilkan
+            $upload = $img;
+        }
+
+        // Simpan data buku ke dalam database
+        Buku::create([
+            'cover' => $upload,
+            'judul_buku' => $request->judul_buku,
+            'penulis_buku' => $request->penulis_buku,
+            'penerbit_buku' => $request->penerbit_buku,
+            'tahun_terbit_buku' => $request->tahun_terbit_buku,
+            'category' => $request->category,
+            'status_buku' => 'Tersedia',
+        ]);
+
+
+        return redirect('pendataan-buku')->with('toast_success', 'Berhasil menambah buku');
+    }
+
+ROUTE EDIT Image
+    public function edit($id_buku)
+    {
+        $buku = Buku::where('id_buku', $id_buku)->first();
+        $category = KategoriBuku::all();
+        return view('page/pendataan-buku/edit', compact('buku', 'category'));
+    }
+
+ROUTE UPDATE Image
+ public function update(Request $request, $id_buku)
+    {
+
+        // dd($request->all());
+        $request->validate(
+            [
+                'cover' => 'image|file|max:1024',
+                'judul_buku' => 'required',
+                'penulis_buku' => 'required',
+                'penerbit_buku' => 'required',
+                'tahun_terbit_buku' => 'required',
+                'category' => 'required',
+                'status_buku' => '',
+            ]
+        );
+
+        $imgCover = $request->file('cover');
+        $img = time() . rand() . '.' . $imgCover->extension();
+
+        if (!file_exists(public_path('/storage/image/' . $imgCover->getClientOriginalName()))) {
+            $destinationPath = public_path('/storage/image/');
+            $imgCover->move($destinationPath, $img);
+            $upload = $img;
+        } else {
+            $upload = $img;
+        }
+
+        Buku::where('id_buku', '=', $id_buku)->update([
+            'cover' => $upload,
+            'judul_buku' => $request->judul_buku,
+            'penulis_buku' => $request->penulis_buku,
+            'penerbit_buku' => $request->penerbit_buku,
+            'tahun_terbit_buku' => $request->tahun_terbit_buku,
+            'category' => $request->category,
+            'status_buku' => 'Tersedia',
+        ]);
+
+        return redirect('pendataan-buku')->with('toast_success', 'Berhasil mengubah buku');
+    }
+
+****Langkah - langkah pembuatan alert toast****
+1. Install package toast [composer require realrashid/sweet-alert]
+2. Tambahkan [RealRashid\SweetAlert\SweetAlertServiceProvider::class,] di bagian config/app.php taro di providers
+3. Tambahkan [ ''Alert' => RealRashid\SweetAlert\Facades\Alert::class,] di bagian config/app.php taro di aliases
+4. Tambahkan [@include('sweetalert::alert')] di bagian layout.blade.php
+5. Jalankan perinta [php artisan sweetalert:publish]
+6. Tabmbahkan [\RealRashid\SweetAlert\ToSweetAlert::class,] di dalam middlewareGroups di bagian kernel.php
+7. Tambahkan [('toast_success', 'Berhasil menghapus produk')] di dalam controller
+
+****Langkah - langkah pembuatan storage****
+1. Jalankan perintah [php artisan storage:link]
+2. Tambahkan [enctype="multipart/form-data"] di dalam form
+
+****Langkah - langkah pembuatan export excel****
+1. Install package composer require psr/simple-cache:^1.0 maatwebsite/excel --ignore-platform-reqs --with-all-dependencies
+2. Jalankan perintah [php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider"]
+3. Jalankan perintah [php artisan make:export UsersExport --model=User] untuk membuat file exportnya
+4. Gunakan template ini supaya rapih
+
+<?php
+
+namespace App\Exports;
+
+use App\Invoice;
+use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+
+class UserExcel implements FromView
+{
+    public function view(): View
+    {
+        return view('page.componen.viewUserExcel', [
+            'user' => User::all()
+        ]);
+    }
+}
+
+Tampilan peminjaman buku
+@if (Auth::user()->role == 'user')
+        <div class="main" id="main">
+            <div class="container-fluid">
+                <div class="row">
+                    @foreach ($buku as $item)
+                        <div class="col-md-4">
+                            <div class="card" style="width: 18rem;">
+                                <img src="{{ asset('storage/image/' . $item->cover) }}" class="card-img-top"
+                                    alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $item->judul_buku }}</h5>
+                                    <p class="card-text">{{ $item->penulis_buku }}</p>
+                                    <p class="card-text">{{ $item->penerbit_buku }}</p>
+                                    <p class="card-text">{{ $item->tahun_terbit_buku }}</p>
+
+                                    <form action="{{ route('riview', $item->id_buku) }}" method="get">
+                                        @csrf
+                                        <button type="submit" class="btn btn-link">Review</button>
+                                    </form>
+
+                                    {{-- <a type="a" class="card-text btn btn-link">Link</a> --}}
+
+                                    <div class="row g-0">
+                                        <div class="col-6 col-md-4">
+                                            <form action="{{ route('auth-peminjaman-buku') }}" method="post">
+
+                                                @csrf
+                                                <input type="hidden" name="id_buku" value="{{ $item->id_buku }}">
+                                                <input type="hidden" name="id_user" value="{{ Auth::user()->id }}">
+                                                <input type="hidden" name="status_peminjaman" value="Dipinjam">
+                                                <input type="hidden" name="tanggal_pinjam" value="{{ date('Y-m-d') }}">
+                                                <input type="hidden" name="tanggal_kembali" value="-">
+
+                                                @if ($item->peminjaman->where('status_peminjaman', 'Dipinjam')->where('id_user', Auth::user()->id)->count() == 0)
+                                                    <button type="submit" class="btn btn-primary">Pinjam</button>
+                                                @else
+                                                    <button type="submit" class="btn btn-primary" disabled>Pinjam</button>
+                                                @endif
+
+
+                                            </form>
+                                        </div>
+
+
+                                        <div class="col-sm-6 col-md-8">
+                                            <form action="{{ route('auth-kolesi-buku') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id_buku" value="{{ $item->id_buku }}">
+                                                <input type="hidden" name="id_user" value="{{ Auth::user()->id }}">
+                                                <button type="submit" class="btn btn-success">Tambah
+                                                    Koleksi</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row g-0 py-1">
+                                        {{-- @dd($item->peminjaman[0]->id_peminjam) --}}
+                                        <div class="col-6 col-md-4">
+                                            @foreach ($item->peminjaman as $item)
+                                                <form action="{{ route('update-peminjaman-buku', $item->id_peminjam) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="hidden" name="status_peminjaman" value="Dikembalikan">
+                                                    <input type="hidden" name="tanggal_kembali"
+                                                        value="{{ date('Y-m-d') }}">
+                                                    @if ($item->status_peminjaman != 'Dikembalikan' && $item->id_user == Auth::user()->id)
+                                                        <button type="submit" class="btn btn-secondary">Return</button>
+                                                    @else
+                                                        <button type="button" class="btn btn-secondary"
+                                                            hidden>Return</button>
+                                                    @endif
+                                                </form>
+                                            @endforeach
+                                        </div>
+                                        <div class="col-sm-6 col-md-8">
+                                            <form action="{{ route('ulasan-buku.create', $item->id_buku) }}"
+                                                method="get">
+                                                @csrf
+                                                {{-- @dd($item->id_user == Auth::user()->id) --}}
+                                                @if (
+                                                    $item->status_peminjaman == 'Dikembalikan' ||
+                                                        ($item->status_peminjaman == 'Dipinjam' && $item->id_user == Auth::user()->id))
+                                                    <button type="submit" class="btn btn-info">Add Review</button>
+                                                @endif
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        @include('sweetalert::alert')
+    @endif
+
+
+****Template Login****
+@extends('main')
+
+@section('main')
+    <div class="content">
+        <section class="vh-100 p-5 d-flex items-content-center">
+            <div class="container-fluid h-custom">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-md-9 col-lg-6 col-xl-5">
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                            class="img-fluid" alt="Sample image">
+                    </div>
+                    <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                        <form action="{{ route('auth-login') }}" method="POST">
+                            @csrf
+                            <div
+                                class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start py-5">
+                                <p class="lead fw-normal mb-0 me-3">Login</p>
+                            </div>
+
+                            <!-- Email input -->
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form3Example3">Username</label>
+                                <input type="text" id="form3Example3" class="form-control form-control-lg"
+                                    placeholder="Enter a valid username" name="username" />
+                            </div>
+
+                            <!-- Password input -->
+                            <div class="form-outline mb-3">
+                                <label class="form-label" for="form3Example4">Password</label>
+                                <input type="password" id="form3Example4" class="form-control form-control-lg"
+                                    placeholder="Enter password" name="password" />
+                            </div>
+                            <div class="text-center text-lg-start mt-4 pt-2 mb-5">
+                                <button type="submit" class="btn btn-primary btn-lg"
+                                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+                            </div>
+                            <div class="text-center">
+                                <p>Buat akun <span><a href="/register">register</a></span></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+    {{-- @include('sweetalert::alert') --}}
+    @include('sweetalert::alert')
+@endsection
+
